@@ -4,13 +4,17 @@
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <title>Hello World!</title>
+    <title>Magical Clipboard</title>
   </head>
   <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
+    <h1>Magical Clipboard</h1>
+    <input type="text" id="array-input"></input>
+    <button type="button" id="set-button">set</button>
+    <p>Values: <span id="values-contents"></span></p>
+    <p>length:  <span id="values-length-contents"></span></p>
+    <h2>Selected</h2>
+    <p>Value: <span id="selected-value-contents"></span></p>
+    <p>Index: <span id="selected-index-contents"></span></p>
     <script src="./renderer.js"></script>
   </body>
 </html>
