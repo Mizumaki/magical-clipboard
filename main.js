@@ -1,8 +1,15 @@
-const { app, BrowserWindow } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  ipcMain,
+  globalShortcut,
+  clipboard,
+} = require("electron");
 const path = require("path");
+const { exit } = require("process");
 
 const createWindow = () => {
-  const win = new BrowserWindow({
+  const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
@@ -10,10 +17,32 @@ const createWindow = () => {
     },
   });
 
-  win.loadFile("index.html");
+  const prevShortcut = globalShortcut.register(
+    "CommandOrControl+Shift+<",
+    () => {
+      mainWindow.webContents.send("clipboard-write-prev");
+    }
+  );
+  const forwardShortcut = globalShortcut.register(
+    "CommandOrControl+Shift+>",
+    () => {
+      mainWindow.webContents.send("clipboard-write-forward");
+    }
+  );
+
+  if (!prevShortcut || !forwardShortcut) {
+    console.error("Shortcut Registration Error!");
+    exit(1);
+  }
+
+  mainWindow.loadFile("index.html");
 };
 
 app.whenReady().then(() => {
+  ipcMain.on("clipboard-writeText", (_event, value) => {
+    clipboard.writeText(String(value));
+  });
+
   createWindow();
   app.on("activate", () => {
     // On macOS it's common to re-create a window in the app when the
